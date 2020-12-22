@@ -2,13 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Profile = (props) => {
-    console.log(props);
+    const { handleLogout } = props;
+    const { exp, id, name, email } = props.user;
+    const expirationTime = new Date(exp * 1000);
+    let currentTime = Date.now();
+    console.log(String(expirationTime));
+
+    if (currentTime >= expirationTime) {
+        handleLogout();
+        alert('Session has ended. Please login again.');
+    }
     const userData = props.user ? 
     (<div>
         <h1>Profile</h1>
-        <p><strong>Name:</strong> {props.user.name}</p> 
-        <p><strong>Email:</strong> {props.user.email}</p> 
-        <p><strong>ID:</strong> {props.user.id}</p> 
+        <p><strong>Name:</strong> { name }</p> 
+        <p><strong>Email:</strong> { email }</p> 
+        <p><strong>ID:</strong> { id }</p>
     </div>) : <h4>Loading...</h4>
 
     const errorDiv = () => {

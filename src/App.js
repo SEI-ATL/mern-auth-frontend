@@ -16,6 +16,7 @@ import About from './components/About';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const user = localStorage.getItem('jwtToken');
+  console.log('Private Route >>>', user);
   return <Route {...rest } render={(props) => {
     return user ? <Component { ...rest } { ...props }/> : <Redirect to="/login" />
   }}/>
@@ -30,9 +31,12 @@ function App() {
     let token;
     // if there is no token in localStorage, then the user is in authenticated
     if (!localStorage.getItem('jwtToken')) {
+      console.log('is Authenticated: >>> false');
       setIsAuthenticated(false);
     } else {
       token = jwt_decode(localStorage.getItem('jwtToken'));
+      console.log(`decode token: >>>`);
+      console.log(token);
       setAuthToken(localStorage.jwtToken);
       setCurrentUser(token);
     }
@@ -62,7 +66,7 @@ function App() {
             path='/login' 
             render={ (props) => <Login {...props} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated} user={currentUser}/>} />
           <Route path='/about' component={ About } />
-          <PrivateRoute path="/profile" component={ Profile } user={currentUser}/>
+          <PrivateRoute path="/profile" component={ Profile } user={currentUser} handleLogout={handleLogout} />
           <Route exact path="/" component={ Welcome }/>
         </Switch>
       </div>
